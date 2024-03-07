@@ -58,12 +58,13 @@ def _resize_pil_image(img, long_edge_size):
     return img.resize(new_size, interp)
 
 
-def load_images(folder_or_list, size, square_ok=False):
+from natsort import natsorted
+def load_images(folder_or_list, size=512, square_ok=False):
     """ open and convert all images in a list or folder to proper input format for DUSt3R
     """
     if isinstance(folder_or_list, str):
         print(f'>> Loading images from {folder_or_list}')
-        root, folder_content = folder_or_list, sorted(os.listdir(folder_or_list))
+        root, folder_content = folder_or_list, natsorted(os.listdir(folder_or_list))
 
     elif isinstance(folder_or_list, list):
         print(f'>> Loading a list of {len(folder_or_list)} images')
@@ -78,12 +79,13 @@ def load_images(folder_or_list, size, square_ok=False):
             continue
         img = exif_transpose(PIL.Image.open(os.path.join(root, path))).convert('RGB')
         W1, H1 = img.size
-        if size == 224:
-            # resize short side to 224 (then crop)
-            img = _resize_pil_image(img, round(size * max(W1/H1, H1/W1)))
-        else:
-            # resize long side to 512
-            img = _resize_pil_image(img, size)
+        if size is not None:
+            if size == 224:
+                # resize short side to 224 (then crop)
+                img = _resize_pil_image(img, round(size * max(W1/H1, H1/W1)))
+            else:
+                # resize long side to 512
+                img = _resize_pil_image(img, size)
         W, H = img.size
         cx, cy = W//2, H//2
         if size == 224:
