@@ -104,4 +104,4 @@ def load_images(folder_or_list, size=512, square_ok=False):
 
     assert imgs, 'no images foud at '+root
     print(f' (Found {len(imgs)} images)')
-    return imgs
+    return imgs,folder_content

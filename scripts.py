@@ -22,7 +22,7 @@ if __name__ == '__main__':
     start = time.time()
     # load_images can take a list of images or a directory
     img_path = args.img_path
-    images = load_images(img_path)
+    images,img_list = load_images(img_path,size=None)
     pairs = make_pairs(images, scene_graph='swin', prefilter=None, symmetrize=False) #build image pairs
     print(f'data process time:{time.time()-start}')
     start = time.time()
@@ -66,7 +66,12 @@ if __name__ == '__main__':
     confidence_masks = scene.get_masks()
     print(f'Alignment inference time:{time.time()-start}')
     start = time.time()
-    print(poses.shape,intrinsics.shape)
+    print(poses.shape,intrinsics.shape,len(pts3d))
+    print(pts3d[0].shape)
+    import json
+    json.dump('pose_dust3r.json',)
+
+    #for i,img_name in enumerate(img_list)
 
     # visualize reconstruction
     #scene.show()
